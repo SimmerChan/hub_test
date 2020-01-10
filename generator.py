@@ -14,6 +14,7 @@ import torch
 from model.img2poem_transformer import Img2PoemTransformer
 from torchvision import transforms
 import json
+import os
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -34,7 +35,7 @@ class Image2PoemGenerator:
         # self.model = Img2Text(cnn_ckpoint, vocab_size, word2idx=self.word2idx)
         # self.model = Img2Poem(cnn_ckpoint, vocab_size=vocab_size, word2idx=self.word2idx, using_kws=using_kws)
 
-        img_class_index2kws = json.load(open('./data/all_new_index2kw.json', 'r', encoding='utf-8'))
+        img_class_index2kws = json.load(open(os.path.join(os.path.realpath(__file__), 'data/all_new_index2kw.json'), 'r', encoding='utf-8'))
         self.using_kws = using_kws
         if self.using_kws:
             self.gen_kws = True
