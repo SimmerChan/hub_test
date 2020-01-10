@@ -34,8 +34,8 @@ class Image2PoemGenerator:
 
         # self.model = Img2Text(cnn_ckpoint, vocab_size, word2idx=self.word2idx)
         # self.model = Img2Poem(cnn_ckpoint, vocab_size=vocab_size, word2idx=self.word2idx, using_kws=using_kws)
-
-        img_class_index2kws = json.load(open(os.path.join(os.path.realpath(__file__), 'data/all_new_index2kw.json'), 'r', encoding='utf-8'))
+        root_path = os.path.split(os.path.realpath(__file__))[0]
+        img_class_index2kws = json.load(open(os.path.join(root_path, 'data/all_new_index2kw.json'), 'r', encoding='utf-8'))
         self.using_kws = using_kws
         if self.using_kws:
             self.gen_kws = True
