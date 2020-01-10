@@ -2,7 +2,6 @@
 
 from generator import Image2PoemGenerator
 import torch
-from io import BytesIO
 
 dependencies = ["torch", "torchvision"]
 
