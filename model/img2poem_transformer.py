@@ -24,7 +24,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 class Img2PoemTransformer(nn.Module):
-    def __init__(self, ck_path, img_class_index2kws, vocab_size, word2idx, using_kws, gen_kws, embedding_dim=512, hidden_dim=512, ff_dim=2048, layer_num=6, head_num=8, max_len=35, pad_idx=0, dropout=0.1, transformer_ck_path=None):
+    def __init__(self, ck, img_class_index2kws, vocab_size, word2idx, using_kws, gen_kws, embedding_dim=512, hidden_dim=512, ff_dim=2048, layer_num=6, head_num=8, max_len=35, pad_idx=0, dropout=0.1, transformer_ck_path=None):
         super(Img2PoemTransformer, self).__init__()
         self.vocab_size = vocab_size
         self.max_len = max_len
@@ -41,7 +41,6 @@ class Img2PoemTransformer(nn.Module):
 
         model = models.resnet101(pretrained=False)
 
-        ck = torch.load(ck_path)
         self.img_encoder_dim = 2048
 
         model.fc = nn.Linear(self.img_encoder_dim, ck['class_num'])
@@ -474,7 +473,7 @@ class Img2PoemTransformer(nn.Module):
             prevs = torch.cat([prevs, current_input], dim=1)
 
         # TODO 后两句用beam search的方式解码增加相关性
-        for i in range((decode_len - 1) // 2):
+        for i in range((decode_len - 1) // 2 + 1):
             poem_rep = self.poem_encoding(prevs)
             poem_mask = prevs.data.eq(self.pad_idx).unsqueeze(1)  # (batch_size, 1, poem_len)
             logits = self.decoding(img_rep, poem_rep, poem_mask, kws_rep, src_mask)

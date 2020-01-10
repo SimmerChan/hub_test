@@ -19,8 +19,13 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 class Image2PoemGenerator:
-    def __init__(self, model_ckpoint, cnn_ckpoint, using_kws=False):
-        checkpoint = torch.load(model_ckpoint)
+    def __init__(self, checkpoint, cnn_checkpoint, using_kws=False):
+        """
+
+        :param checkpoint: loaded checkpoint -> dict ['word2idx', 'model', 'best_epoch', 'train_loss', 'dev_loss']
+        :param cnn_checkpoint: loaded checkpoint -> dict ['model', 'class_num', 'best_epoch', 'train_acc', 'dev_acc']
+        :param using_kws:
+        """
 
         self.word2idx = checkpoint['word2idx']
         vocab_size = len(self.word2idx)
@@ -35,7 +40,7 @@ class Image2PoemGenerator:
             self.gen_kws = True
         else:
             self.gen_kws = False
-        self.model = Img2PoemTransformer(cnn_ckpoint, img_class_index2kws, vocab_size, self.word2idx, using_kws, self.gen_kws)
+        self.model = Img2PoemTransformer(cnn_checkpoint, img_class_index2kws, vocab_size, self.word2idx, using_kws, self.gen_kws)
 
         self.model.load_state_dict(checkpoint['model'])
         self.model.to(device)
@@ -44,7 +49,7 @@ class Image2PoemGenerator:
         self.types = {'五言': '<five>', '七言': '<seven>'}
         self.decode_lens = {'五言': 25, '七言': 33}
 
-    def generate(self, img, poem_type='五言', search_type='beam', **kwargs):
+    def generate(self, img, poem_type='五言', search_type='beam search', **kwargs):
         img = self._image_prepocess(img)
 
         beam_size = kwargs['beam_size']
