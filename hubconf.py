@@ -4,7 +4,7 @@ from generator import Image2PoemGenerator
 import torch
 from io import BytesIO
 
-dependencies = ["torch", "torchvision", "pillow<7.0.0"]
+dependencies = ["torch", "torchvision", "pillow=6.2.2"]
 
 
 def model():
