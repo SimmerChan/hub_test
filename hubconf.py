@@ -3,7 +3,7 @@
 from generator import Image2PoemGenerator
 import torch
 
-dependencies = ["torch", "torchvision"]
+dependencies = ["torch", "torchvision", "pillow<7.0.0"]
 
 
 def model():
